@@ -1,5 +1,5 @@
 
-.SILENT:
+#.SILENT:
 
 # General rule is that CAPITAL variables are constants and can be used
 # via $(VARNAME), while lowercase variables are dynamic and need to be
@@ -204,11 +204,17 @@ configure += --enable-lto
 configure += --enable-static=yes
 configure += --disable-libstdcxx-verbose
 configure += --disable-decimal-float
-configure += --enable-multilib
+configure += --with-cpu=cortex-m0plus
+configure += --with-no-thumb-interwork
+#configure += --with-mode=thumb
+#configure += --enable-multilib
 
 # Newlib configuration common
 CONFIGURENEWLIBCOM  = --with-newlib
-CONFIGURENEWLIBCOM += --enable-multilib
+CONFIGURENEWLIBCOM += --with-cpu=cortex-m0plus
+CONFIGURENEWLIBCOM += --with-no-thumb-interwork
+#CONFIGURENEWLIBCOM += --with-mode=thumb
+#CONFIGURENEWLIBCOM += --enable-multilib
 CONFIGURENEWLIBCOM += --disable-newlib-io-c99-formats
 CONFIGURENEWLIBCOM += --disable-newlib-supplied-syscalls
 CONFIGURENEWLIBCOM += --enable-newlib-nano-formatted-io
@@ -488,7 +494,7 @@ clean: .cleaninst.LINUX.clean .cleaninst.LINUX32.clean .cleaninst.WIN32.clean .c
 	rm -rf $(call arena,$@)/$(GCC_DIR)/$(ARCH)/libstdc++-v3-nox > $(call log,$@) 2>&1
 	cp -a $(call arena,$@)/$(GCC_DIR)/$(ARCH)/libstdc++-v3 $(call arena,$@)/$(GCC_DIR)/$(ARCH)/libstdc++-v3-nox >> $(call log,$@) 2>&1
 	(cd $(call arena,$@)/$(GCC_DIR)/$(ARCH)/libstdc++-v3-nox; $(call setenv,$@); $(MAKE) clean; find . -name Makefile -exec sed -i 's/-free/-free -fno-exceptions/' \{\} \; ; $(MAKE)) >> $(call log,$@) 2>&1
-	cp $(ARCH)$(call ext,$@)/$(ARCH)/lib/libstdc++.a $(ARCH)$(call ext,$@)/$(ARCH)/lib/libstdc++-exc.a >> $(call log,$@) 2>&1
+	cp $(ARCH)$(call ext,$@)/$(ARCH)/lib/thumb/libstdc++.a $(ARCH)$(call ext,$@)/$(ARCH)/lib/thumb/libstdc++-exc.a >> $(call log,$@) 2>&1
 	cp $(call arena,$@)/$(GCC_DIR)/$(ARCH)/libstdc++-v3-nox/src/.libs/libstdc++.a $(ARCH)$(call ext,$@)/$(ARCH)/lib/libstdc++.a >> $(call log,$@) 2>&1
 	touch $@
 
